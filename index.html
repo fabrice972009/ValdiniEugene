@@ -140,7 +140,6 @@
   .bubble.hero-bubble { border-color:#c9a961; background:rgba(201,169,97,0.08); }
 
   .empty-note { font-family:'Cormorant Garamond',serif; font-style:italic; color:#888; font-size:17px; text-align:center; margin-top:60px; }
-  .load-error-note { font-family:'Jost',sans-serif; font-size:12px; color:#d98a8a; text-align:center; background:rgba(217,138,138,0.08); border:1px solid rgba(217,138,138,0.25); border-radius:6px; padding:10px 14px; margin-bottom:14px; }
 
   @media (min-width:900px) {
     .bubble { width:260px; padding:20px 22px; }
@@ -229,7 +228,6 @@
     <h2>Photos of Val</h2>
     <div class="sub">Shared by those who knew him</div>
     <div class="gallery-field" id="gallery-field">
-      <div class="load-error-note" id="gallery-load-error" style="display:none;">Couldn't load photos right now &mdash; please refresh, or check back shortly.</div>
       <div class="gallery-grid" id="gallery-grid"></div>
     </div>
   </div>
@@ -289,7 +287,6 @@ let selectedPhotosData = [];
 let bubbleItems = [];
 let bubbleTimer = null;
 let bubbleSlotCount = 5;
-let loadError = null;
 
 function initDots() {
   const dotsWrap = document.getElementById('page-dots');
@@ -329,12 +326,7 @@ async function loadTestimonies() {
       .order('ts', { ascending: false });
     if (error) throw error;
     bubbleItems = [heroItem, ...(data || [])];
-    loadError = null;
-  } catch(e) {
-    console.error('Failed to load testimonies from Supabase:', e);
-    bubbleItems = [heroItem];
-    loadError = e;
-  }
+  } catch(e) { bubbleItems = [heroItem]; }
   renderTestimonyCards();
   renderGallery();
 }
@@ -342,13 +334,12 @@ async function loadTestimonies() {
 function renderTestimonyCards(){
   const wrap = document.getElementById('t-cards-wrap');
   if (!wrap) return;
-  const errorBanner = loadError ? '<div class="load-error-note">Couldn\'t load testimonies right now &mdash; please refresh, or check back shortly.</div>' : '';
   if (!bubbleItems || bubbleItems.length === 0) {
-    wrap.innerHTML = errorBanner + '<div class="empty-note">Be the first to share a memory of Val.</div>';
+    wrap.innerHTML = '<div class="empty-note">Be the first to share a memory of Val.</div>';
     return;
   }
   let photoCursor = 0;
-  wrap.innerHTML = errorBanner + '<div class="t-grid">' + bubbleItems.map((item, i) => {
+  wrap.innerHTML = '<div class="t-grid">' + bubbleItems.map((item, i) => {
     const photos = getItemPhotos(item);
     const relationshipHtml = item.relationship ? '<div class="t-relationship">' + escapeHtml(item.relationship) + '</div>' : '';
     const startIdx = photoCursor;
@@ -390,8 +381,6 @@ let currentGalleryIndex = 0;
 
 function renderGallery(){
   const grid = document.getElementById('gallery-grid');
-  const errEl = document.getElementById('gallery-load-error');
-  if (errEl) errEl.style.display = loadError ? 'block' : 'none';
   if (!grid) return;
   galleryItems = [];
   (bubbleItems || []).forEach(item => {
@@ -514,9 +503,7 @@ async function submitTestimony(){
     status.className='form-status'; status.textContent='Thank you for sharing your memory of Val.';
     await loadTestimonies();
   } catch(e){
-    console.error('Failed to submit testimony:', e);
-    status.className='form-status error';
-    status.textContent = 'Something went wrong: ' + (e && e.message ? e.message : 'please try again.');
+    status.className='form-status error'; status.textContent='Something went wrong. Try smaller photos.';
   } finally {
     btn.disabled=false; btn.textContent='Leave a Testimony';
   }
