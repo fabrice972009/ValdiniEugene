@@ -3,6 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<title>In Loving Memory of Valdini Eugene</title>
+<meta name="description" content="A gathering place for friends and family to share memories, testimonies, and photos in loving memory of Valdini Eugene &mdash; Invictus, Saint-Louis de Gonzague, Class of 2017.">
+<meta name="robots" content="noindex, nofollow">
+
+<!-- Social preview (WhatsApp, iMessage, Facebook, etc.) -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="In Loving Memory of Valdini Eugene">
+<meta property="og:description" content="Share a memory, a story, or a photo in loving memory of Val. Invictus, Saint-Louis de Gonzague, Class of 2017.">
+<meta property="og:image" content="og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="In Loving Memory of Valdini Eugene">
+<meta name="twitter:description" content="Share a memory, a story, or a photo in loving memory of Val.">
+<meta name="twitter:image" content="og-image.jpg">
+
+<link rel="icon" type="image/png" href="favicon.png">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=Jost:wght@300;400;500;600&display=swap');
   * { margin:0; padding:0; box-sizing:border-box; }
@@ -66,15 +81,16 @@
     display:flex; flex-direction:column; justify-content:flex-start; align-items:flex-start;
     box-shadow:0 4px 14px rgba(0,0,0,0.25);
   }
+  .t-note .t-header { display:flex; flex-direction:column; align-items:flex-start; margin-bottom:10px; }
+  .t-note .t-relationship { font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:var(--t-color); opacity:0.75; margin-bottom:2px; }
+  .t-note .t-name { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:14px; color:var(--t-color); opacity:0.95; }
   .t-note .t-quote { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:clamp(13px,1.5vw,16px); line-height:1.5; color:#f0f0f0; white-space:pre-wrap; margin-bottom:8px; text-align:left; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
   .t-note.expanded .t-quote { display:block; -webkit-line-clamp:unset; overflow:visible; }
-  .t-note .t-card-actions { display:flex; align-items:center; gap:14px; margin-bottom:10px; flex-wrap:wrap; }
-  .t-note .t-viewmore { display:none; background:none; border:none; color:var(--t-color); font-size:10px; letter-spacing:0.08em; text-transform:uppercase; cursor:pointer; text-decoration:underline; padding:0; }
-  .t-note .t-share-btn { background:none; border:1px solid rgba(201,169,97,0.35); color:var(--t-color); font-size:10px; letter-spacing:0.08em; text-transform:uppercase; cursor:pointer; padding:4px 10px; border-radius:12px; transition:all .2s; }
-  .t-note .t-share-btn:hover { background:rgba(201,169,97,0.12); }
-  .t-note .t-photo { width:32px; height:32px; border-radius:50%; object-fit:cover; margin-bottom:8px; border:1.5px solid var(--t-color); }
-  .t-note .t-relationship { font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:var(--t-color); opacity:0.75; align-self:flex-end; margin-bottom:2px; }
-  .t-note .t-name { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:12px; color:var(--t-color); opacity:0.85; align-self:flex-end; }
+  .t-note .t-photos { display:none; flex-wrap:wrap; gap:8px; margin:10px 0; }
+  .t-note.expanded .t-photos { display:flex; }
+  .t-note .t-photos img { width:96px; height:96px; object-fit:cover; border-radius:6px; border:1px solid rgba(255,255,255,0.12); cursor:pointer; transition:transform .2s ease; }
+  .t-note .t-photos img:hover { transform:scale(1.04); }
+  .t-note .t-viewmore { display:none; margin-top:4px; background:none; border:none; color:var(--t-color); font-size:10px; letter-spacing:0.08em; text-transform:uppercase; cursor:pointer; text-decoration:underline; padding:0; }
   .t-note.hero-note { background:rgba(201,169,97,0.08); border-color:rgba(201,169,97,0.3); }
   @media (max-width:900px) {
     .t-note .t-quote { font-size:13px; }
@@ -103,8 +119,6 @@
   .g-lightbox-nav { display:flex; align-items:center; gap:20px; margin-top:14px; }
   .g-arrow { width:38px; height:38px; border-radius:50%; border:1px solid rgba(255,255,255,0.25); background:transparent; color:#c9a961; font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all .2s; }
   .g-arrow:hover { border-color:#c9a961; background:rgba(201,169,97,0.1); }
-  .g-share-btn { background:transparent; border:1px solid rgba(201,169,97,0.4); color:#c9a961; font-family:'Jost',sans-serif; font-size:11px; letter-spacing:0.08em; text-transform:uppercase; padding:9px 16px; border-radius:18px; cursor:pointer; transition:all .2s; }
-  .g-share-btn:hover { background:rgba(201,169,97,0.12); }
 
   .bubble {
     position:absolute;
@@ -255,7 +269,6 @@
     <div class="g-lightbox-caption" id="g-lightbox-caption"></div>
     <div class="g-lightbox-nav">
       <button class="g-arrow" onclick="prevGalleryPhoto()" aria-label="Previous photo">&#8249;</button>
-      <button class="g-share-btn" onclick="shareGalleryPhoto()">Share</button>
       <button class="g-arrow" onclick="nextGalleryPhoto()" aria-label="Next photo">&#8250;</button>
     </div>
   </div>
@@ -325,28 +338,30 @@ function renderTestimonyCards(){
     wrap.innerHTML = '<div class="empty-note">Be the first to share a memory of Val.</div>';
     return;
   }
+  let photoCursor = 0;
   wrap.innerHTML = '<div class="t-grid">' + bubbleItems.map((item, i) => {
     const photos = getItemPhotos(item);
-    const photoHtml = photos.length ? '<img class="t-photo" src="'+photos[0]+'">' : '';
     const relationshipHtml = item.relationship ? '<div class="t-relationship">' + escapeHtml(item.relationship) + '</div>' : '';
+    const startIdx = photoCursor;
+    const photosHtml = photos.length ? '<div class="t-photos" id="t-photos-'+i+'">' + photos.map((p, pi) =>
+      '<img src="'+p+'" onclick="openLightbox('+(startIdx+pi)+')">'
+    ).join('') + '</div>' : '';
+    photoCursor += photos.length;
     return '<div class="t-note' + (item.isHero?' hero-note':'') + '" id="t-note-'+i+'">' +
+      '<div class="t-header">' + relationshipHtml + '<div class="t-name">' + escapeHtml(item.name) + '</div>' + '</div>' +
       '<div class="t-quote" id="t-quote-'+i+'">' + escapeHtml(item.message) + '</div>' +
-      '<div class="t-card-actions">' +
-        '<button class="t-viewmore" id="t-viewmore-'+i+'" onclick="toggleNote('+i+')">View More</button>' +
-        '<button class="t-share-btn" onclick="shareTestimonyByIndex('+i+')">Share</button>' +
-      '</div>' +
-      photoHtml +
-      relationshipHtml +
-      '<div class="t-name">' + escapeHtml(item.name) + '</div>' +
+      photosHtml +
+      '<button class="t-viewmore" id="t-viewmore-'+i+'" onclick="toggleNote('+i+')">View More</button>' +
       '</div>';
   }).join('') + '</div>';
 
-  // Only show the "View More" toggle on cards where the 3-line clamp actually cut something off.
+  // Show the "View More" toggle when the text got clamped, or when there's a photo to reveal.
   requestAnimationFrame(() => {
     bubbleItems.forEach((item, i) => {
       const q = document.getElementById('t-quote-'+i);
       const btn = document.getElementById('t-viewmore-'+i);
-      if (q && btn && q.scrollHeight > q.clientHeight + 1) {
+      const hasPhotos = getItemPhotos(item).length > 0;
+      if (q && btn && (q.scrollHeight > q.clientHeight + 1 || hasPhotos)) {
         btn.style.display = 'inline-block';
       }
     });
@@ -419,45 +434,6 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'ArrowRight') nextGalleryPhoto();
   if (e.key === 'ArrowLeft') prevGalleryPhoto();
 });
-
-function buildShareText(item){
-  const who = item.relationship ? item.relationship + ' — ' + item.name : item.name;
-  return '"' + item.message + '"\n— ' + who + '\n\nShared in loving memory of Valdini Eugene.';
-}
-
-async function shareItem(item, photoOverride){
-  if (!item) return;
-  const text = buildShareText(item);
-  const photo = photoOverride || getItemPhotos(item)[0] || null;
-  if (navigator.share) {
-    const shareData = { title: 'In Memory of Val', text };
-    if (photo && navigator.canShare) {
-      try {
-        const blob = await (await fetch(photo)).blob();
-        const file = new File([blob], 'testimony-photo.jpg', { type: blob.type || 'image/jpeg' });
-        if (navigator.canShare({ files: [file] })) shareData.files = [file];
-      } catch(e) { /* fall back to text-only share */ }
-    }
-    try { await navigator.share(shareData); } catch(e) { /* user cancelled the share sheet */ }
-  } else {
-    // No native share support (typically desktop): open WhatsApp with the text pre-filled,
-    // and download the photo separately since wa.me links can't attach media directly.
-    window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
-    if (photo) {
-      const a = document.createElement('a');
-      a.href = photo;
-      a.download = 'testimony-photo.jpg';
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-    }
-  }
-}
-function shareTestimonyByIndex(idx){ shareItem(bubbleItems[idx]); }
-function shareGalleryPhoto(){
-  const g = galleryItems[currentGalleryIndex];
-  if (g) shareItem(g, g.photo);
-}
 
 const MAX_PHOTOS = 4;
 
