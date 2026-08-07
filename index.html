@@ -55,55 +55,27 @@
   .testimony-page h2 { font-family:'Playfair Display',serif; font-weight:600; font-size:clamp(22px,3vw,30px); color:#fdfdfd; margin-bottom:4px; text-align:center; }
   .testimony-page .sub { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:14px; color:#999; margin-bottom:2vh; text-align:center; }
 
-  .bubble-field { position:relative; width:100%; max-width:640px; flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; margin:0 auto; overflow:hidden; min-height:0; }
-  .t-slide-wrap { width:100%; flex:1; display:flex; align-items:center; justify-content:center; overflow:hidden; min-height:0; }
+  .bubble-field { position:relative; width:100%; max-width:900px; flex:1; display:flex; flex-direction:column; align-items:stretch; justify-content:flex-start; margin:0 auto; overflow-y:auto; overflow-x:hidden; padding-right:6px; min-height:0; }
+  .t-grid { width:100%; display:flex; flex-direction:column; gap:14px; }
   .t-note {
     --t-color:#c9a961;
-    width:100%;
-    max-height:100%;
-    overflow-y:auto;
     background:rgba(255,255,255,0.04);
     border:1px solid rgba(255,255,255,0.08);
     border-radius:10px;
-    padding:22px 24px;
+    padding:16px 18px;
     display:flex; flex-direction:column; justify-content:flex-start; align-items:flex-start;
-    box-shadow:0 6px 20px rgba(0,0,0,0.3);
-    animation:fadein .35s ease;
+    box-shadow:0 4px 14px rgba(0,0,0,0.25);
   }
-  .t-note .t-quote { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:clamp(14px,2vw,18px); line-height:1.6; color:#f0f0f0; white-space:pre-wrap; margin-bottom:16px; text-align:left; }
-  .t-note .t-photo { width:48px; height:48px; border-radius:50%; object-fit:cover; margin-bottom:12px; border:1.5px solid var(--t-color); }
-  .t-note .t-relationship { font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--t-color); opacity:0.75; align-self:flex-end; margin-bottom:3px; }
-  .t-note .t-name { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:13px; color:var(--t-color); opacity:0.9; align-self:flex-end; }
+  .t-note .t-quote { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:clamp(13px,1.5vw,16px); line-height:1.5; color:#f0f0f0; white-space:pre-wrap; margin-bottom:8px; text-align:left; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+  .t-note.expanded .t-quote { display:block; -webkit-line-clamp:unset; overflow:visible; }
+  .t-note .t-viewmore { display:none; align-self:flex-start; margin-bottom:10px; background:none; border:none; color:var(--t-color); font-size:10px; letter-spacing:0.08em; text-transform:uppercase; cursor:pointer; text-decoration:underline; padding:0; }
+  .t-note .t-photo { width:32px; height:32px; border-radius:50%; object-fit:cover; margin-bottom:8px; border:1.5px solid var(--t-color); }
+  .t-note .t-relationship { font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:var(--t-color); opacity:0.75; align-self:flex-end; margin-bottom:2px; }
+  .t-note .t-name { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:12px; color:var(--t-color); opacity:0.85; align-self:flex-end; }
   .t-note.hero-note { background:rgba(201,169,97,0.08); border-color:rgba(201,169,97,0.3); }
-  .t-slide-nav { display:flex; align-items:center; justify-content:center; gap:20px; margin-top:16px; flex-shrink:0; }
-  .t-arrow { width:38px; height:38px; border-radius:50%; border:1px solid rgba(255,255,255,0.25); background:transparent; color:#c9a961; font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all .2s; }
-  .t-arrow:hover { border-color:#c9a961; background:rgba(201,169,97,0.1); }
-  .t-slide-count { font-size:11px; letter-spacing:0.1em; color:#999; min-width:46px; text-align:center; }
-  .t-viewall-btn { margin-top:14px; flex-shrink:0; background:transparent; border:1px solid rgba(201,169,97,0.4); color:#c9a961; font-family:'Jost',sans-serif; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; padding:10px 20px; border-radius:20px; cursor:pointer; transition:all .2s; }
-  .t-viewall-btn:hover { background:rgba(201,169,97,0.12); }
   @media (max-width:900px) {
-    .t-note .t-quote { font-size:14px; }
-    .t-note { padding:18px 20px; }
+    .t-note .t-quote { font-size:13px; }
   }
-
-  /* VIEW ALL MODAL */
-  .t-modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.78); backdrop-filter:blur(4px); display:none; align-items:center; justify-content:center; z-index:200; padding:6vh 6vw; }
-  .t-modal-overlay.show { display:flex; }
-  .t-modal { background:#141210; border:1px solid rgba(201,169,97,0.35); border-radius:10px; max-width:600px; width:100%; max-height:84vh; overflow-y:auto; padding:30px 26px; position:relative; box-shadow:0 20px 60px rgba(0,0,0,0.55); }
-  .t-modal-close { position:absolute; top:12px; right:14px; width:32px; height:32px; border-radius:50%; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.15); color:#ccc; font-size:18px; line-height:1; cursor:pointer; display:flex; align-items:center; justify-content:center; }
-  .t-modal-close:hover { color:#c9a961; border-color:#c9a961; }
-  .t-modal-title { font-family:'Playfair Display',serif; font-weight:600; font-size:19px; color:#fdfdfd; margin-bottom:16px; text-align:center; }
-  .t-modal-list { display:flex; flex-direction:column; }
-  .t-modal-item { border-bottom:1px solid rgba(255,255,255,0.08); padding:14px 4px; }
-  .t-modal-item .t-mi-top { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; cursor:pointer; }
-  .t-modal-item .t-mi-names { min-width:0; flex:1; }
-  .t-modal-item .t-mi-relationship { font-size:9.5px; letter-spacing:0.1em; text-transform:uppercase; color:#999; margin-bottom:2px; }
-  .t-modal-item .t-mi-name { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:15px; color:#c9a961; }
-  .t-modal-item .t-mi-preview { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:13.5px; color:#ccc; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; margin-top:3px; }
-  .t-modal-item .t-mi-more { flex-shrink:0; background:none; border:none; color:#c9a961; font-size:10px; letter-spacing:0.08em; text-transform:uppercase; cursor:pointer; text-decoration:underline; padding:2px; }
-  .t-modal-item .t-mi-full { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:14.5px; line-height:1.6; color:#f0f0f0; white-space:pre-wrap; margin-top:10px; display:none; }
-  .t-modal-item.expanded .t-mi-full { display:block; }
-  .t-modal-item.expanded .t-mi-preview { display:none; }
 
   .bubble {
     position:absolute;
@@ -203,13 +175,7 @@
     <h2>In His Memory</h2>
     <div class="sub">Memories, stories, and photos from those who loved him</div>
     <div class="bubble-field" id="bubble-field">
-      <div id="t-slide-wrap"></div>
-      <div class="t-slide-nav">
-        <button class="t-arrow" onclick="prevTestimony()" aria-label="Previous testimony">&#8249;</button>
-        <div class="t-slide-count" id="t-slide-count"></div>
-        <button class="t-arrow" onclick="nextTestimony()" aria-label="Next testimony">&#8250;</button>
-      </div>
-      <button class="t-viewall-btn" onclick="openAllModal()">View All Testimonies</button>
+      <div id="t-cards-wrap"></div>
     </div>
   </div>
 
@@ -241,14 +207,6 @@
     <button class="nav-arrow" onclick="nextPage()">&#8250;</button>
   </div>
 </div>
-</div>
-
-<div class="t-modal-overlay" id="t-modal-overlay" onclick="if(event.target===this) closeAllModal()">
-  <div class="t-modal">
-    <button class="t-modal-close" onclick="closeAllModal()">&times;</button>
-    <div class="t-modal-title">All Testimonies</div>
-    <div class="t-modal-list" id="t-modal-list"></div>
-  </div>
 </div>
 
 <script>
@@ -297,96 +255,47 @@ async function loadTestimonies() {
     if (error) throw error;
     bubbleItems = [heroItem, ...(data || [])];
   } catch(e) { bubbleItems = [heroItem]; }
-  currentTestimonyIndex = 0;
   renderTestimonyCards();
 }
 
-let currentTestimonyIndex = 0;
-
 function renderTestimonyCards(){
-  const wrap = document.getElementById('t-slide-wrap');
-  const countEl = document.getElementById('t-slide-count');
+  const wrap = document.getElementById('t-cards-wrap');
   if (!wrap) return;
   if (!bubbleItems || bubbleItems.length === 0) {
     wrap.innerHTML = '<div class="empty-note">Be the first to share a memory of Val.</div>';
-    if (countEl) countEl.textContent = '';
     return;
   }
-  if (currentTestimonyIndex >= bubbleItems.length) currentTestimonyIndex = 0;
-  renderCurrentSlide();
-}
-
-function renderCurrentSlide(){
-  const wrap = document.getElementById('t-slide-wrap');
-  const countEl = document.getElementById('t-slide-count');
-  if (!wrap || !bubbleItems.length) return;
-  const item = bubbleItems[currentTestimonyIndex];
-  const photoHtml = item.photo ? '<img class="t-photo" src="'+item.photo+'">' : '';
-  const relationshipHtml = item.relationship ? '<div class="t-relationship">' + escapeHtml(item.relationship) + '</div>' : '';
-  wrap.innerHTML = '<div class="t-note' + (item.isHero?' hero-note':'') + '">' +
-    '<div class="t-quote">' + escapeHtml(item.message) + '</div>' +
-    photoHtml +
-    relationshipHtml +
-    '<div class="t-name">' + escapeHtml(item.name) + '</div>' +
-    '</div>';
-  if (countEl) countEl.textContent = (currentTestimonyIndex+1) + ' / ' + bubbleItems.length;
-}
-
-function nextTestimony(){
-  if (!bubbleItems.length) return;
-  currentTestimonyIndex = (currentTestimonyIndex+1) % bubbleItems.length;
-  renderCurrentSlide();
-}
-function prevTestimony(){
-  if (!bubbleItems.length) return;
-  currentTestimonyIndex = (currentTestimonyIndex-1+bubbleItems.length) % bubbleItems.length;
-  renderCurrentSlide();
-}
-
-function firstLine(msg){
-  if (!msg) return '';
-  const nl = msg.indexOf('\n');
-  let line = nl >= 0 ? msg.slice(0, nl) : msg;
-  if (line.length > 100) line = line.slice(0, 100) + '…';
-  else if (nl >= 0) line += '…';
-  return line;
-}
-
-function openAllModal(){
-  const list = document.getElementById('t-modal-list');
-  const overlay = document.getElementById('t-modal-overlay');
-  if (!list || !overlay) return;
-  if (!bubbleItems || bubbleItems.length === 0) {
-    list.innerHTML = '<div class="empty-note">Be the first to share a memory of Val.</div>';
-  } else {
-    list.innerHTML = bubbleItems.map((item, idx) => {
-      const relationshipHtml = item.relationship ? '<div class="t-mi-relationship">' + escapeHtml(item.relationship) + '</div>' : '';
-      return '<div class="t-modal-item" id="t-mi-'+idx+'">' +
-        '<div class="t-mi-top" onclick="toggleModalItem('+idx+')">' +
-          '<div class="t-mi-names">' + relationshipHtml +
-            '<div class="t-mi-name">' + escapeHtml(item.name) + '</div>' +
-            '<div class="t-mi-preview">' + escapeHtml(firstLine(item.message)) + '</div>' +
-          '</div>' +
-          '<button class="t-mi-more" onclick="event.stopPropagation(); toggleModalItem('+idx+')">View More</button>' +
-        '</div>' +
-        '<div class="t-mi-full">' + escapeHtml(item.message) + '</div>' +
+  wrap.innerHTML = '<div class="t-grid">' + bubbleItems.map((item, i) => {
+    const photoHtml = item.photo ? '<img class="t-photo" src="'+item.photo+'">' : '';
+    const relationshipHtml = item.relationship ? '<div class="t-relationship">' + escapeHtml(item.relationship) + '</div>' : '';
+    return '<div class="t-note' + (item.isHero?' hero-note':'') + '" id="t-note-'+i+'">' +
+      '<div class="t-quote" id="t-quote-'+i+'">' + escapeHtml(item.message) + '</div>' +
+      '<button class="t-viewmore" id="t-viewmore-'+i+'" onclick="toggleNote('+i+')">View More</button>' +
+      photoHtml +
+      relationshipHtml +
+      '<div class="t-name">' + escapeHtml(item.name) + '</div>' +
       '</div>';
-    }).join('');
-  }
-  overlay.classList.add('show');
+  }).join('') + '</div>';
+
+  // Only show the "View More" toggle on cards where the 3-line clamp actually cut something off.
+  requestAnimationFrame(() => {
+    bubbleItems.forEach((item, i) => {
+      const q = document.getElementById('t-quote-'+i);
+      const btn = document.getElementById('t-viewmore-'+i);
+      if (q && btn && q.scrollHeight > q.clientHeight + 1) {
+        btn.style.display = 'inline-block';
+      }
+    });
+  });
 }
-function closeAllModal(){
-  const overlay = document.getElementById('t-modal-overlay');
-  if (overlay) overlay.classList.remove('show');
-}
-function toggleModalItem(idx){
-  const el = document.getElementById('t-mi-'+idx);
+
+function toggleNote(idx){
+  const el = document.getElementById('t-note-'+idx);
+  const btn = document.getElementById('t-viewmore-'+idx);
   if (!el) return;
   const expanded = el.classList.toggle('expanded');
-  const btn = el.querySelector('.t-mi-more');
   if (btn) btn.textContent = expanded ? 'View Less' : 'View More';
 }
-document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeAllModal(); });
 
 function handlePhotoSelect(event){
   const file = event.target.files[0];
