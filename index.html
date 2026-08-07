@@ -55,30 +55,25 @@
   .testimony-page h2 { font-family:'Playfair Display',serif; font-weight:600; font-size:clamp(22px,3vw,30px); color:#fdfdfd; margin-bottom:4px; text-align:center; }
   .testimony-page .sub { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:14px; color:#999; margin-bottom:2vh; text-align:center; }
 
-  .bubble-field { position:relative; width:100%; max-width:1100px; flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; margin:0 auto; overflow:hidden; }
-  .t-grid { width:100%; height:100%; display:grid; grid-template-columns:repeat(3,1fr); grid-auto-rows:1fr; gap:14px; align-items:stretch; }
+  .bubble-field { position:relative; width:100%; max-width:900px; flex:1; display:flex; flex-direction:column; align-items:stretch; justify-content:flex-start; margin:0 auto; overflow-y:auto; overflow-x:hidden; padding-right:6px; }
+  .t-grid { width:100%; display:flex; flex-direction:column; gap:14px; }
   .t-note {
-    --t-color:#c9a961; --t-rot:0deg;
+    --t-color:#c9a961;
     background:rgba(255,255,255,0.04);
     border:1px solid rgba(255,255,255,0.08);
     border-radius:8px;
-    padding:14px 16px;
-    display:flex; flex-direction:column; justify-content:center; align-items:flex-start;
-    transform:rotate(var(--t-rot));
+    padding:16px 18px;
+    display:flex; flex-direction:column; justify-content:flex-start; align-items:flex-start;
     box-shadow:0 4px 14px rgba(0,0,0,0.25);
-    overflow:hidden;
   }
-  .t-note .t-quote { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:clamp(12px,1.5vw,15px); line-height:1.4; color:#f0f0f0; white-space:pre-wrap; margin-bottom:8px; text-align:left; display:-webkit-box; -webkit-line-clamp:5; -webkit-box-orient:vertical; overflow:hidden; }
-  .t-note .t-photo { width:28px; height:28px; border-radius:50%; object-fit:cover; margin-bottom:6px; border:1.5px solid var(--t-color); }
-  .t-note .t-name { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:11px; color:var(--t-color); opacity:0.85; align-self:flex-end; }
+  .t-note .t-quote { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:clamp(13px,1.5vw,16px); line-height:1.5; color:#f0f0f0; white-space:pre-wrap; margin-bottom:10px; text-align:left; }
+  .t-note .t-photo { width:32px; height:32px; border-radius:50%; object-fit:cover; margin-bottom:8px; border:1.5px solid var(--t-color); }
+  .t-note .t-relationship { font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:var(--t-color); opacity:0.75; align-self:flex-end; margin-bottom:2px; }
+  .t-note .t-name { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:12px; color:var(--t-color); opacity:0.85; align-self:flex-end; }
   .t-note.hero-note { background:rgba(201,169,97,0.08); border-color:rgba(201,169,97,0.3); }
   @media (max-width:900px) {
-    .t-grid { grid-template-columns:1fr; grid-auto-rows:auto; gap:10px; }
-    .t-note .t-quote { -webkit-line-clamp:4; font-size:13px; }
+    .t-note .t-quote { font-size:13px; }
   }
-  .t-nav { display:flex; align-items:center; justify-content:center; gap:28px; margin-top:18px; }
-  .t-arrow { width:38px; height:38px; border-radius:50%; border:1px solid rgba(255,255,255,0.25); background:transparent; color:#c9a961; font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all .2s; }
-  .t-arrow:hover { border-color:#c9a961; background:rgba(201,169,97,0.1); }
   .bubble {
     position:absolute;
     background:rgba(255,255,255,0.05);
@@ -178,10 +173,6 @@
     <div class="sub">Memories, stories, and photos from those who loved him</div>
     <div class="bubble-field" id="bubble-field">
       <div id="t-cards-wrap"></div>
-      <div class="t-nav" id="t-nav" style="display:none;">
-        <button class="t-arrow" onclick="prevTestimony()">&#8249;</button>
-        <button class="t-arrow" onclick="nextTestimony()">&#8250;</button>
-      </div>
     </div>
   </div>
 
@@ -191,6 +182,8 @@
       <div class="sub">Share what he meant to you</div>
       <label>Your Name</label>
       <input type="text" id="name-input" placeholder="Full name" maxlength="80">
+      <label>How You Knew Val (optional)</label>
+      <input type="text" id="relationship-input" placeholder="e.g. Invictus, Class of 2017, Classmate" maxlength="100">
       <label>Your Testimony</label>
       <textarea id="msg-input" placeholder="Share a memory, a story, or what Val meant to you..." maxlength="2000"></textarea>
       <label>Add a Photo (optional)</label>
@@ -254,7 +247,7 @@ async function loadTestimonies() {
   try {
     const { data, error } = await supabaseClient
       .from('testimonies')
-      .select('name, message, photo, ts')
+      .select('name, relationship, message, photo, ts')
       .order('ts', { ascending: false });
     if (error) throw error;
     bubbleItems = [heroItem, ...(data || [])];
@@ -262,57 +255,29 @@ async function loadTestimonies() {
   renderTestimonyCards();
 }
 
-let testimonyPage = 0;
-const T_PAGE_SIZE_DESKTOP = 6;
-const T_PAGE_SIZE_MOBILE = 3;
 const T_COLORS = ['#c9a961','#8fb3c9','#c98f9e','#9ec98f','#c9b08f','#a98fc9'];
-const T_ROTATIONS = [-2, 1.5, -1, 2, -1.5, 1, -2.5, 0.8];
-
-function getTestimonyPageSize(){
-  return window.innerWidth < 900 ? T_PAGE_SIZE_MOBILE : T_PAGE_SIZE_DESKTOP;
-}
 
 function renderTestimonyCards(){
   const wrap = document.getElementById('t-cards-wrap');
   const nav = document.getElementById('t-nav');
+  if (nav) nav.style.display = 'none';
   if (!wrap) return;
   if (!bubbleItems || bubbleItems.length === 0) {
     wrap.innerHTML = '<div class="empty-note">Be the first to share a memory of Val.</div>';
-    if (nav) nav.style.display = 'none';
     return;
   }
-  testimonyPage = 0;
-  if (nav) nav.style.display = bubbleItems.length > getTestimonyPageSize() ? 'flex' : 'none';
-  renderTestimonyPage();
-}
-
-function renderTestimonyPage(){
-  const wrap = document.getElementById('t-cards-wrap');
-  if (!wrap || !bubbleItems || bubbleItems.length === 0) return;
-  const pageSize = getTestimonyPageSize();
-  const totalPages = Math.max(1, Math.ceil(bubbleItems.length / pageSize));
-  testimonyPage = ((testimonyPage % totalPages) + totalPages) % totalPages;
-  const start = testimonyPage * pageSize;
-  const items = bubbleItems.slice(start, start + pageSize);
-
-  wrap.innerHTML = '<div class="t-grid">' + items.map((item, i) => {
+  wrap.innerHTML = '<div class="t-grid">' + bubbleItems.map((item, i) => {
     const photoHtml = item.photo ? '<img class="t-photo" src="'+item.photo+'">' : '';
     const color = T_COLORS[i % T_COLORS.length];
-    const rot = T_ROTATIONS[i % T_ROTATIONS.length];
-    return '<div class="t-note' + (item.isHero?' hero-note':'') + '" style="--t-color:'+color+'; --t-rot:'+rot+'deg;">' +
+    const relationshipHtml = item.relationship ? '<div class="t-relationship">' + escapeHtml(item.relationship) + '</div>' : '';
+    return '<div class="t-note' + (item.isHero?' hero-note':'') + '" style="--t-color:'+color+';">' +
       '<div class="t-quote">' + escapeHtml(item.message) + '</div>' +
       photoHtml +
+      relationshipHtml +
       '<div class="t-name">' + escapeHtml(item.name) + '</div>' +
       '</div>';
   }).join('') + '</div>';
-
-  const nav = document.getElementById('t-nav');
-  if (nav) nav.style.display = bubbleItems.length > pageSize ? 'flex' : 'none';
 }
-
-function nextTestimony(){ testimonyPage++; renderTestimonyPage(); }
-function prevTestimony(){ testimonyPage--; renderTestimonyPage(); }
-window.addEventListener('resize', () => { if (currentPage === 2) renderTestimonyPage(); });
 
 function handlePhotoSelect(event){
   const file = event.target.files[0];
@@ -344,10 +309,12 @@ function removePhoto(){
 
 async function submitTestimony(){
   const nameEl = document.getElementById('name-input');
+  const relationshipEl = document.getElementById('relationship-input');
   const msgEl = document.getElementById('msg-input');
   const btn = document.getElementById('submit-btn');
   const status = document.getElementById('form-status');
   const name = nameEl.value.trim();
+  const relationship = relationshipEl.value.trim();
   const message = msgEl.value.trim();
   status.className='form-status'; status.textContent='';
   if (!name || !message){ status.className='form-status error'; status.textContent='Please add your name and a message.'; return; }
@@ -356,9 +323,9 @@ async function submitTestimony(){
     const ts = Date.now();
     const { error } = await supabaseClient
       .from('testimonies')
-      .insert([{ name, message, ts, photo: selectedPhotoData || null }]);
+      .insert([{ name, relationship: relationship || null, message, ts, photo: selectedPhotoData || null }]);
     if (error) throw error;
-    nameEl.value=''; msgEl.value=''; removePhoto();
+    nameEl.value=''; relationshipEl.value=''; msgEl.value=''; removePhoto();
     status.className='form-status'; status.textContent='Thank you for sharing your memory of Val.';
     await loadTestimonies();
   } catch(e){
